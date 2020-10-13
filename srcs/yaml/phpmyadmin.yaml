@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: phpmyadmin
+spec:
+  containers:
+    - name : cont-phpmyadmin
+      image: im-phpmyadmin 
+      ports: 
+      - containerPort: 5000
+      imagePullPolicy: Never

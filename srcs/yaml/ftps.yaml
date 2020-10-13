@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: ftps
+spec:
+  containers:
+    - name : ftps
+      image: ftps
+      ports: 
+      - containerPort: 21
+      # imagePullPolicy: Never
