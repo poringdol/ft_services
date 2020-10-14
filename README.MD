@@ -28,6 +28,9 @@ docker ps
 # удалить все контейнеры
 docker container prune -f
 
+# удалить все образы
+docker image prune -a -f
+
 # удалить контейнер
 docker rm ft_cont
 

@@ -13,11 +13,13 @@ RUN apk add nginx && \
 	apk add openssh && \
 	apk add php7 php7-fpm php7-opcache && \
 	apk add php7-gd php7-mysqli php7-zlib php7-curl && \
-	apk add php7-openssl
+	apk add php7-openssl && \
+	rm -vrf /var/cache/apk/*
 
 RUN mkdir -p /run/nginx
 
 COPY srcs/index.html /var/www/
+COPY srcs/index.php /var/www/
 COPY srcs/nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY srcs/localhost.crt /etc/ssl/certs/

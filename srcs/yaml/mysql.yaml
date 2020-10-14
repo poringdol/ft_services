@@ -1,11 +1,77 @@
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-volume
+spec:
+  storageClassName: local-storage
+  capacity:
+    storage: 200Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+  # local:
+    path: "/mnt/data-mysql"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-mysql
+spec:
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 200Mi
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql
+  name: dep-mysql
+  labels:
+    app: mysql
 spec:
-  containers:
-    - name : cont-mysql
-      image: im-mysql
-      ports: 
-      - containerPort: 3306
-      imagePullPolicy: Never
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name : cont-mysql
+          image: im-mysql
+          ports: 
+          - containerPort: 3306
+          imagePullPolicy: Never
+          volumeMounts:
+            - mountPath: "/var/lib/mysql"
+              name: data
+          env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secret-mysql
+                key: root-password
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pvc-mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: serv-mysql
+spec:
+  selector:
+    app: mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+      name: mysql

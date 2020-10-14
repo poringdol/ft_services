@@ -9,7 +9,8 @@ RUN apk add wget
 RUN apk add curl
 RUN apk add php7 php7-fpm php7-opcache && \
 	apk add php7-gd php7-mysqli php7-zlib php7-curl &&\
-	apk add php7-mbstring php7-json php7-session
+	apk add php7-mbstring php7-json php7-session &&\
+	rm -vrf /var/cache/apk/*
 
 RUN mkdir -p /var/www/
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-all-languages.tar.gz && \

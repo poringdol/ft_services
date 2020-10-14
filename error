@@ -1,0 +1,6 @@
+error: the path "./srcs/k8/configmap.yaml" does not exist
+unable to prepare context: path "./srcs/wordpress" not found
+unable to prepare context: path "./srcs/grafana" not found
+unable to prepare context: path "./srcs/influxdb" not found
+unable to prepare context: path "./srcs/telegraf" not found
+unable to prepare context: path "./srcs/ftps" not found

@@ -1,12 +1,9 @@
-export KUBERNETES_MASTER=https://MasterIP:6443
-# mkdir -p $HOME/.kube
-# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-# sudo chown $(id -u):$(id -g) $HOME/.kube/config
+# export KUBERNETES_MASTER=https://MasterIP:6443
 
 minikube start --vm-driver=virtualbox
 eval $(minikube docker-env)
-minikube addons enable metallb;
 minikube addons enable dashboard;
+
 
 docker build -t im-nginx ./srcs/nginx
 docker build -t im-phpmyadmin ./srcs/phpmyadmin
@@ -18,7 +15,10 @@ docker build -t im-mysql ./srcs/mysql
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
 kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+
 kubectl apply -f srcs/yaml/metalllb-config.yaml
+kubectl apply -f srcs/yaml/secrets.yaml
+kubectl apply -f srcs/yaml/storageclass.yaml
 
 kubectl apply -f srcs/yaml/ftps.yaml
 kubectl apply -f srcs/yaml/grafana.yaml

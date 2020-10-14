@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# adduser -D pdemocri
-# echo -e "pdemocri\npdemocri" | passwd pdemocri
-# ssh-keygen -A
+adduser -D pdemocri
+echo -e "pdemocri\npdemocri" | passwd pdemocri
+ssh-keygen -A
 php-fpm7
 nginx -g 'daemon off;'
 
