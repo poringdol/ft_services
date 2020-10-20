@@ -8,6 +8,7 @@ minikube addons enable dashboard;
 docker build -t im-nginx ./srcs/nginx
 docker build -t im-phpmyadmin ./srcs/phpmyadmin
 docker build -t im-mysql ./srcs/mysql
+docker build -t im-wordpress ./srcs/wordpress
 
 # docker run --name nginx_cont -it -p 80:80 -p 443:443 nginx
 # docker run --name php_cont -d -p 5000:5000 php

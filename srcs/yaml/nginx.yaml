@@ -1,25 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dep-nginx
+  name: nginx
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: nginx
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
         app: nginx
     spec:
       containers:
-      - name: cont-nginx
-        image: im-nginx
-        imagePullPolicy: Never
-        ports:
-          - containerPort: 80
-          - containerPort: 443
-          - containerPort: 22
+        - name: cont-nginx
+          image: im-nginx
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 22
 ---
 apiVersion: v1
 kind: Service

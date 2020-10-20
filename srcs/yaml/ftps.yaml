@@ -9,3 +9,5 @@ spec:
       ports: 
       - containerPort: 21
       # imagePullPolicy: Never
+strategy:
+  type: Recreate

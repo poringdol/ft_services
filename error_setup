@@ -1,8 +1,0 @@
-error: the path "./srcs/k8/nginx.yaml" does not exist
-error: the path "./srcs/k8/phpmyadmin.yaml" does not exist
-error: the path "./srcs/k8/wordpress.yaml" does not exist
-error: the path "./srcs/k8/mysql.yaml" does not exist
-error: the path "./srcs/k8/grafana.yaml" does not exist
-error: the path "./srcs/k8/influxdb.yaml" does not exist
-error: the path "./srcs/k8/telegraf.yaml" does not exist
-error: the path "./srcs/k8/ftps.yaml" does not exist

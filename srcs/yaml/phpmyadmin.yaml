@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dep-phpmyadmin
+  name: phpmyadmin
   labels:
     app: phpmyadmin
 spec:
@@ -9,6 +9,8 @@ spec:
   selector:
     matchLabels:
       app: phpmyadmin
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -20,16 +22,16 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 5000
-          env:
-            - name: PMA_HOST
-              value: "serv-mysql"
-            - name: PMA_PORT
-              value: "3306"
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: secret-mysql
-                  key: root-password
+          # env:
+          #   - name: PMA_HOST
+          #     value: "serv-mysql"
+          #   - name: PMA_PORT
+          #     value: "3306"
+          #   - name: MYSQL_ROOT_PASSWORD
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: secret-mysql
+          #         key: root-password
 ---
 apiVersion: v1
 kind: Service
@@ -41,7 +43,7 @@ spec:
   ports:
     - port: 5000
       targetPort: 5000
-      name: https
+      name: http
       protocol: TCP
   selector:
     app: phpmyadmin
