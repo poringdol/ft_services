@@ -7,7 +7,7 @@ echo -e "pdemocri\npdemocri" | passwd pdemocri
 chown -R pdemocri:pdemocri /var/lib/nginx
 chown -R pdemocri:pdemocri /var/www
 chmod 755 /var/www
-ssh-keygen -A
+ssh-keygen
 
 rc-service sshd start
 rc-service nginx start

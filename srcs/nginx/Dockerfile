@@ -27,8 +27,9 @@ COPY srcs/index.html /var/www/
 COPY srcs/index.php /var/www/
 COPY srcs/background.jpg /var/www/
 
-COPY srcs/localhost.crt /etc/ssl/certs/
-COPY srcs/localhost.key /etc/ssl/certs/
+RUN openssl req -newkey rsa:2048 -nodes -x509 -days 90 -subj \
+        "/C=RU/ST=MO/L=Balaha/O=21school/OU=21/CN=pdemocri/emailAddress=pdemocri@student.21-school.ru" \
+         -out /etc/ssl/certs/localhost.crt -keyout /etc/ssl/certs/localhost.key
 
 COPY srcs/run.sh /
 RUN chmod 777 run.sh

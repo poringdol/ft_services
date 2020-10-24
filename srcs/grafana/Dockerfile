@@ -12,6 +12,6 @@ RUN apk add rsync && \
 	rsync -av /grafana-7.0.6/ / && \
 	rm -rf grafana-7.0.6.linux-amd64.tar.gz grafana-7.0.6
 
-# COPY srcs/grafana.db /data/
+COPY srcs/grafana.db /data/
 
 ENTRYPOINT grafana-server

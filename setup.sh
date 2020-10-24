@@ -10,15 +10,14 @@ eval $(minikube docker-env)
 minikube addons enable dashboard;
 
 mkdir -p srcs/_logs
-services="ftps"
-# services="nginx phpmyadmin mysql wordpress influxdb grafana ftps"
+services="nginx phpmyadmin mysql wordpress influxdb grafana ftps"
 for service in $services
     do
         docker build -t $service ./srcs/$service &>srcs/_logs/$service
         if [ $? == 0 ]; then
             echo -e 💚$green "   image" $blue "$service" $green "created" $reset
         else
-            echo -e 💔$red "create image" $service "error" $reset
+            echo -e 💔$red "build image" $service "error" $reset
             exit 1
         fi
 
