@@ -8,8 +8,8 @@ RUN apk update && \
 	apk add mariadb mariadb-client && \
 	rm -vrf /var/cache/apk/*
 
-VOLUME /sys/fs/cgroup
 VOLUME /var/lib/mysql
+VOLUME /sys/fs/cgroup
 
 COPY srcs/db.sql /etc/mysql/
 COPY srcs/my.cnf /etc/mysql/

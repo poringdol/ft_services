@@ -1,17 +1,35 @@
-# export KUBERNETES_MASTER=https://MasterIP:6443
+# minikube delete
+
+red="\x1b[31m"
+blue="\x1b[32m"
+green="\x1b[36m"
+reset="\x1b[37m"
 
 minikube start --vm-driver=virtualbox
 eval $(minikube docker-env)
 minikube addons enable dashboard;
 
+mkdir -p srcs/_logs
+services="ftps"
+# services="nginx phpmyadmin mysql wordpress influxdb grafana ftps"
+for service in $services
+    do
+        docker build -t $service ./srcs/$service &>srcs/_logs/$service
+        if [ $? == 0 ]; then
+            echo -e 💚$green "   image" $blue "$service" $green "created" $reset
+        else
+            echo -e 💔$red "create image" $service "error" $reset
+            exit 1
+        fi
 
-docker build -t im-nginx ./srcs/nginx
-docker build -t im-phpmyadmin ./srcs/phpmyadmin
-docker build -t im-mysql ./srcs/mysql
-docker build -t im-wordpress ./srcs/wordpress
-
-# docker run --name nginx_cont -it -p 80:80 -p 443:443 nginx
-# docker run --name php_cont -d -p 5000:5000 php
+        kubectl apply -f srcs/yaml/$service.yaml &>>srcs/_logs/$service
+        if [ $? == 0 ]; then
+            echo -e 💚$green " service" $blue "$service" $green "applyed" $reset
+        else
+            echo -e 💔$red " apply service" $service "error" $reset
+            exit 1
+        fi
+    done
 
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
@@ -21,11 +39,20 @@ kubectl apply -f srcs/yaml/metalllb-config.yaml
 kubectl apply -f srcs/yaml/secrets.yaml
 kubectl apply -f srcs/yaml/storageclass.yaml
 
-kubectl apply -f srcs/yaml/ftps.yaml
-kubectl apply -f srcs/yaml/grafana.yaml
-kubectl apply -f srcs/yaml/nginx.yaml
-kubectl apply -f srcs/yaml/phpmyadmin.yaml
-kubectl apply -f srcs/yaml/mysql.yaml
-kubectl apply -f srcs/yaml/wordpress.yaml
-
 minikube dashboard
+
+# docker build -t nginx ./srcs/nginx
+# docker build -t phpmyadmin ./srcs/phpmyadmin
+# docker build -t mysql ./srcs/mysql
+# docker build -t wordpress ./srcs/wordpress
+# docker build -t influxdb ./srcs/influxdb
+# docker build -t grafana ./srcs/grafana
+# docker build -t ftps   ./srcs/ftps
+
+# kubectl apply -f srcs/yaml/nginx.yaml
+# kubectl apply -f srcs/yaml/phpmyadmin.yaml
+# kubectl apply -f srcs/yaml/mysql.yaml
+# kubectl apply -f srcs/yaml/wordpress.yaml
+# kubectl apply -f srcs/yaml/influxdb.yaml
+# kubectl apply -f srcs/yaml/grafana.yaml
+# kubectl apply -f srcs/yaml/ftps.yaml

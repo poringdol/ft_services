@@ -1,13 +1,42 @@
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ftps
+  labels:
+    app: ftps
 spec:
-  containers:
-    - name : ftps
-      image: ftps
-      ports: 
-      - containerPort: 21
-      # imagePullPolicy: Never
-strategy:
-  type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ftps
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ftps
+    spec:
+      containers:
+        - name: ftps
+          image: ftps
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 21
+            - containerPort: 65000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-ftps
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.99.103
+  ports:
+    - port: 21
+      name: ftp
+      protocol: TCP
+    - port: 65000
+      name: ftp-pasv
+      protocol: TCP
+  selector:
+    app: ftps

@@ -1,14 +1,71 @@
-apiVersion: v1
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: volume-grafana
+# spec:
+#   storageClassName: local-storage
+#   capacity:
+#     storage: 200Mi
+#   accessModes:
+#     - ReadWriteOnce
+#   hostPath:
+#     path: "/mnt/storage"
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: pvc-grafana
+# spec:
+#   storageClassName: local-storage
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 200Mi
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: grafana
+  labels:
+    app: grafana
 spec:
-  containers:
-    - name : grafana
-      image: grafana
-      ports: 
-      - containerPort: 3000
-      # imagePullPolicy: Never
-    - name : influxdb
-      image: influxdb
-      # imagePullPolicy: Never
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - name : grafana
+          image: grafana 
+          ports:
+          - containerPort: 3000
+          imagePullPolicy: Never
+      #     volumeMounts:
+      #       - name: ps-grafana
+      #         mountPath: /data
+      # volumes:
+      #   - name: ps-grafana
+      #     persistentVolumeClaim:
+      #       claimName: pvc-grafana
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: serv-grafana
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.99.105
+  ports:
+    - port: 3000
+      targetPort: 3000
+      name: http
+      protocol: TCP
+  selector:
+    app: grafana

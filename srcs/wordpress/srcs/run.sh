@@ -2,13 +2,21 @@
 
 adduser -D -g 'pdemocri' pdemocri
 echo -e "pdemocri\npdemocri" | passwd pdemocri
-# chown -R root:root /var/lib/nginx
-# chown -R root:root /var/www/html
 
-# find . -type f -exec chmod 664 {} +
-# find . -type d -exec chmod 775 {} +
-# chmod 660 wp-config.php
-
+nginx
 php-fpm7
-nginx -g 'daemon off;'
-# php -S 0.0.0.0:5050 -t /etc/wordpress
+
+while [ true ]
+do
+    nginx_pid=$(ps aux | grep nginx | wc -l)
+    php_pid=$(ps aux | grep php-fpm7 | wc -l)
+    if [ $nginx_pid == 0 ]
+    then
+        exit 1
+    fi
+    if [ $php_pid == 0 ]
+    then 
+        exit 1
+    fi
+    sleep 30
+done

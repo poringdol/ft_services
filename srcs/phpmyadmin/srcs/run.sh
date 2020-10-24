@@ -5,6 +5,20 @@ echo -e "pdemocri\npdemocri" | passwd pdemocri
 chown -R pdemocri:pdemocri /var/lib/nginx
 chown -R pdemocri:pdemocri /var/www
 
+nginx
 php-fpm7
-nginx -g 'daemon off;'
-# php --server 0.0.0.0:5000 --docroot var/www/phpmyadmin
+
+while [ true ]
+do
+    nginx_pid=$(ps aux | grep nginx | wc -l)
+    php_pid=$(ps aux | grep php-fpm7 | wc -l)
+    if [ $nginx_pid == 0 ]
+    then
+        exit 1
+    fi
+    if [ $php_pid == 0 ]
+    then 
+        exit 1
+    fi
+    sleep 30
+done
