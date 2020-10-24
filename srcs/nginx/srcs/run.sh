@@ -26,11 +26,11 @@ do
     fi
     if [ $nginx_pid == 0 ]
     then
-        exit 1
+        pkill sshd && exit 1
     fi
     if [ $php_pid == 0 ]
     then 
-        exit 1
+        pkill sshd && exit 1
     fi
     sleep 30
 done
