@@ -6,6 +6,7 @@ green="\x1b[36m"
 reset="\x1b[37m"
 
 minikube start --vm-driver=virtualbox
+sleep 5
 eval $(minikube docker-env)
 minikube addons enable dashboard;
 
